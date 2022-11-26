@@ -4,6 +4,7 @@
 #include "Arduino.h"
 
 class MPU{
+  
   public:
   MPU(int address, int powerSettings);
   int getAddress();
@@ -12,10 +13,20 @@ class MPU{
   void initAccel();
   void setPowerSettings(int powerSettings);
   int getPowerSettings();
+  double getAccelX();
+  double getAccelY();
+  double getAccelZ();
+  void updateAccelData();
+  void printAccelData();
   private:
   int mpu_address;
   int powerSettings;
   int accelRangeSettings;
+
+  //arduino does not allow advanced data structures so using properties
+  double accelX;
+  double accelY;
+  double accelZ;
 };
 
 #endif
