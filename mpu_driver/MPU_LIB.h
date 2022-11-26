@@ -21,6 +21,8 @@ class MPU{
   void calculateAngles();
   double getPitch();
   double getRoll();
+  void setOffsetAngle(int angle);
+  int getOffsetAngle();
   private:
   int mpu_address;
   int powerSettings;
@@ -30,6 +32,9 @@ class MPU{
   int accelX;
   int accelY;
   int accelZ;
+
+  //offset angle (in degrees)
+  int offsetAngle;
 
   //angles
   double pitch;

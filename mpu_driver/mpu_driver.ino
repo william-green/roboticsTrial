@@ -24,8 +24,7 @@ void setup() {
 }
 
 void loop() {
-
-  delay(15);
+  //delay(2000);
   
   daMPU->updateAccelData();
   daMPU->printAccelData();
@@ -33,29 +32,23 @@ void loop() {
   double position = 0;
 
   daMPU->calculateAngles();
-  //getAngle(daMPU->getAccelX(), daMPU->getAccelY(), daMPU->getAccelZ());
 
   Serial.print("pitch: ");
   Serial.println(daMPU->getPitch());
   Serial.print("roll: ");
   Serial.println(daMPU->getRoll());
 
+  if(Serial.available() > 1){
+    //data was sent
+    int newOffsetAngle = Serial.parseInt();//sets 0 if not integer
+    Serial.print("new offset angle detected: ");
+    Serial.println(newOffsetAngle);
+    daMPU->setOffsetAngle(newOffsetAngle);
+  }
+
+  //actuate the motor but first check the angle bounds
   if(daMPU->getRoll() >= 0 && daMPU->getRoll() <= 180){
     daServo.write(daMPU->getRoll());
   }
-
-  //motor test
-  /*
-  int pos = 0;
-  for (pos = 0; pos <= 180; pos += 1) { // goes from 0 degrees to 180 degrees
-    // in steps of 1 degree
-    daServo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-  for (pos = 180; pos >= 0; pos -= 1) { // goes from 180 degrees to 0 degrees
-    daServo.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(15);                       // waits 15ms for the servo to reach the position
-  }
-*/
   
 }

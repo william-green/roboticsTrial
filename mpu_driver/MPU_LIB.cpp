@@ -16,6 +16,8 @@ MPU::MPU(int address, int powerSettings){
   //init angles
   this->pitch = 0;
   this->roll = 0;
+
+  this->offsetAngle = 0;
 }
 
 double MPU::getAccelX(){
@@ -111,7 +113,17 @@ void MPU::calculateAngles(){
   this->roll = atan(y/sqrt((x*x) + (z*z)));
   //convert radians into degrees
   this->pitch = pitch * (180.0/3.14);
-  this->roll = (roll * (180.0/3.14)) + 90;
+  //add 90 to account for controller being at a different angle than the servo
+  //add the offset angle
+  this->roll = (roll * (180.0/3.14)) + 90 + this->offsetAngle; 
+}
+
+void MPU::setOffsetAngle(int angle){
+  this->offsetAngle = angle;
+}
+
+int MPU::getOffsetAngle(){
+  return this->offsetAngle;
 }
 
 void MPU::initAccel(){
