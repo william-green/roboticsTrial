@@ -1,6 +1,7 @@
 #include "MPU_LIB.h"
 #include "Arduino.h"
 #include <Wire.h>
+#include <math.h>
 
 MPU::MPU(int address, int powerSettings){
   this->mpu_address = address;//mpu address
@@ -11,6 +12,10 @@ MPU::MPU(int address, int powerSettings){
   this->accelX = 0;
   this->accelY = 0;
   this->accelZ = 0;
+
+  //init angles
+  this->pitch = 0;
+  this->roll = 0;
 }
 
 double MPU::getAccelX(){
@@ -57,10 +62,10 @@ void MPU::updateAccelData(){
   Z Axis: 3F, 40
   */
   
-  //read data from the x axis
-  byte tempX = 0;
-  byte tempY = 0;
-  byte tempZ = 0;
+  //read data from the x axis into temp variables
+  int tempX = 0;
+  int tempY = 0;
+  int tempZ = 0;
     
   //first register of x axis
   Wire.write(0x3B);
@@ -72,9 +77,9 @@ void MPU::updateAccelData(){
   Wire.requestFrom(this->mpu_address, 6, true);//Wire.requestFrom(address, quantity, stop)
     
   //returns the bytes requested from the peripheral controller
-  tempX = (Wire.read() << 8 | Wire.read());
-  tempY = (Wire.read() << 8 | Wire.read());
-  tempZ = (Wire.read() << 8 | Wire.read());
+  tempX = (Wire.read() << 8 | Wire.read()) - 250;
+  tempY = (Wire.read() << 8 | Wire.read()) + 36;
+  tempZ = (Wire.read() << 8 | Wire.read()) + 1200;
 
   this->accelX = tempX;
   this->accelY = tempY;
@@ -88,6 +93,25 @@ void MPU::printAccelData(){
   Serial.println(this->accelY);
   Serial.print("Z: ");
   Serial.println(this->accelZ);
+}
+
+double MPU::getPitch(){
+  return this->pitch;
+}
+
+double MPU::getRoll(){
+  return this->roll;
+}
+
+void MPU::calculateAngles(){
+  double x = this->accelX;
+  double y = this->accelY;
+  double z = this->accelZ;
+  this->pitch = atan(x/sqrt((y*y) + (z*z)));
+  this->roll = atan(y/sqrt((x*x) + (z*z)));
+  //convert radians into degrees
+  this->pitch = pitch * (180.0/3.14);
+  this->roll = (roll * (180.0/3.14)) + 90;
 }
 
 void MPU::initAccel(){

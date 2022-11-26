@@ -18,15 +18,22 @@ class MPU{
   double getAccelZ();
   void updateAccelData();
   void printAccelData();
+  void calculateAngles();
+  double getPitch();
+  double getRoll();
   private:
   int mpu_address;
   int powerSettings;
   int accelRangeSettings;
 
   //arduino does not allow advanced data structures so using properties
-  double accelX;
-  double accelY;
-  double accelZ;
+  int accelX;
+  int accelY;
+  int accelZ;
+
+  //angles
+  double pitch;
+  double roll;
 };
 
 #endif
