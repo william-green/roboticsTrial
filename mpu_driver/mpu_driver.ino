@@ -24,7 +24,7 @@ void setup() {
 }
 
 void loop() {
-  delay(2000);
+  //delay(2000);
   
   daMPU->updateAccelData();
   daMPU->printAccelData();
@@ -40,9 +40,10 @@ void loop() {
 
   if(Serial.available() > 1){
     //data was sent
-    int test = Serial.parseInt();
-    Serial.print("test: ");
-    Serial.println(test);
+    int newOffsetAngle = Serial.parseInt();//sets 0 if not integer
+    Serial.print("new offset angle detected: ");
+    Serial.println(newOffsetAngle);
+    daMPU->setOffsetAngle(newOffsetAngle);
   }
 
   //actuate the motor but first check the angle bounds
