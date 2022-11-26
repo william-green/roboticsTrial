@@ -11,8 +11,14 @@ void setup() {
   daMPU = new MPU(104, 0b00010000);
 
   daMPU->initAccel();
+
+  Serial.begin(9600);
 }
 
 void loop() {
 
+  delay(3000);
+  
+  daMPU->updateAccelData();
+  daMPU->printAccelData();
 }

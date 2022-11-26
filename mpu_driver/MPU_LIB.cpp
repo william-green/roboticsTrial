@@ -82,9 +82,12 @@ void MPU::updateAccelData(){
 }
 
 void MPU::printAccelData(){
-  Serial.println("X: " + this->accelX);
-  Serial.println("Y: " + this->accelY);
-  Serial.println("Z: " + this->accelZ);
+  Serial.print("X: ");
+  Serial.println(this->accelX);
+  Serial.print("Y: ");
+  Serial.println(this->accelY);
+  Serial.print("Z: ");
+  Serial.println(this->accelZ);
 }
 
 void MPU::initAccel(){
