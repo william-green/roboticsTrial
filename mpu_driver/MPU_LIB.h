@@ -5,7 +5,7 @@
 
 class MPU{
   public:
-  MPU(int address);
+  MPU(int address, int powerSettings);
   int getAddress();
   void initAccel();
   void setPowerSettings(int powerSettings);
